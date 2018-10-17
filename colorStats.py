@@ -7,6 +7,9 @@ from Color import Color
 
 imageName = input("Image name: ")
 limit = int(input("How many colors would you like?: "))
+ignoreDarkLimit = int(input("Ignore colors with no rbg value above (75): ")) #0-75
+ignoreLightLimit = int(input("Ignore colors with rgb sum below (750): "))#765
+
 img = None
 try:
     img = Image.open(imageName)
@@ -48,18 +51,26 @@ text-shadow:-1px -1px 0 #000, \
     f.write("</div>\n")
     f.write("<div>\n")
     f.write("<ol type='1'>\n")
-    for c in range(limit):
-        f.write("<li>\n")
-        f.write("<p style='background-color:rgb"+str(sortedTop[c][0])+"'>")
-        f.write("<b>")
-        hexi = "#{:02x}{:02x}{:02x}".format(sortedTop[c][0][0],
-                                            sortedTop[c][0][1],
-                                            sortedTop[c][0][2])
-        f.write(str(hexi)+" "+str(sortedTop[c][0]))
-        f.write("</b>")
-        f.write("<ul><li>Pixel count: "+str(sortedTop[c][1])+"</li></ul>")
-        f.write("<p>\n")
-        f.write("</li>\n")
+    c = 0
+    while c < limit and c < len(sortedTop):
+        if (sum(sortedTop[c][0]) < ignoreLightLimit
+            and (sortedTop[c][0][0] > ignoreDarkLimit
+            or sortedTop[c][0][1] > ignoreDarkLimit
+            or sortedTop[c][0][2] > ignoreDarkLimit)):
+            f.write("<li>\n")
+            f.write("<p style='background-color:rgb"+str(sortedTop[c][0])+"'>")
+            hexi = "#{:02x}{:02x}{:02x}".format(sortedTop[c][0][0],
+                                                sortedTop[c][0][1],
+                                                sortedTop[c][0][2])
+            f.write("<b>")
+            f.write(str(hexi)+" "+str(sortedTop[c][0]))
+            f.write("</b>")
+            f.write("<ul><li>Pixel count: "+str(sortedTop[c][1])+"</li></ul>")
+            f.write("<p>\n")
+            f.write("</li>\n")
+        else:
+            limit+=1
+        c += 1
     f.write("</ol>\n")
     f.write("</div>\n")
     f.write("</body>\n")
