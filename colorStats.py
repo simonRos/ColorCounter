@@ -3,12 +3,11 @@
 import operator
 import os
 from PIL import Image
-from Color import Color
 
 imageName = input("Image name: ")
 limit = int(input("How many colors would you like?: "))
-ignoreDarkLimit = int(input("Ignore colors with no rbg value above (75): ")) #0-75
-ignoreLightLimit = int(input("Ignore colors with rgb sum below (750): "))#765
+ignoreDarkLimit = int(input("Ignore colors darker than(0-75): ")) #0-75
+ignoreLightLimit = int(input("Ignore colors lighter than(750-765): "))#765
 
 img = None
 try:
@@ -53,10 +52,10 @@ text-shadow:-1px -1px 0 #000, \
     f.write("<ol type='1'>\n")
     c = 0
     while c < limit and c < len(sortedTop):
-        if (sum(sortedTop[c][0]) < ignoreLightLimit
-            and (sortedTop[c][0][0] > ignoreDarkLimit
-            or sortedTop[c][0][1] > ignoreDarkLimit
-            or sortedTop[c][0][2] > ignoreDarkLimit)):
+        #simple, average greyscaling
+        grey = (sum(sortedTop[c][0])/3)
+        if (grey < ignoreLightLimit
+            and grey > ignoreDarkLimit):
             f.write("<li>\n")
             f.write("<p style='background-color:rgb"+str(sortedTop[c][0])+"'>")
             hexi = "#{:02x}{:02x}{:02x}".format(sortedTop[c][0][0],
