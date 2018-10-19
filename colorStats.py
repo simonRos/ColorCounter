@@ -6,15 +6,30 @@ try:
     from PIL import Image
 except Exception as e1:
     try:
+        print(str(e1) + " Trying alternative module.")
         import Image
+        print("Alt mod successful")
     except Exception as e2:
-        print(e1)
         print(e2)
+try:
+    from PIL import ImageSequence
+except Exception as e3:
+    try:
+        print(str(e3) + " Trying alternative module.")
+        import ImageSequence
+        print("Alt mod successful")
+    except Exception as e4:
+        print(e4)
+try:
+    imageName = input("Image name: ")
+    img = Image.open(imageName)
+except:
+    print("No file with that name")
+    raise SystemExit
 
-imageName = input("Image name: ")
 limit = 10
 try:
-    int(input("How many colors would you like?(10): "))
+    limit = int(input("How many colors would you like?(10): "))
 except:
     pass
 ignoreDarkLimit = 50
@@ -28,24 +43,21 @@ try:
 except:
     pass
 
-img = None
-try:
-    img = Image.open(imageName)
-except:
-    print("No file with that name")
-
-width, height = img.size
-pixels = img.load()
-#put pixels in counting dictionary
 colDict = {}
-for x in range(height):
-    for y in range(width):
-        pix = pixels[y,x]
-        if pix in colDict:
-            colDict[pix] += 1
-        else:
-            colDict[pix] = 1
-
+#.gifs have multiple frames
+i = 1
+for frame in ImageSequence.Iterator(img):
+    frame = frame.convert('RGB')
+    #put pixels in counting dictionary
+    width, height = frame.size
+    pixels = frame.load()
+    for y in range(height):
+        for x in range(width):
+            pix = pixels[x,y]
+            if pix in colDict:
+                colDict[pix] += 1
+            else:
+                colDict[pix] = 1
 sortedTop = sorted(colDict.items(), key=operator.itemgetter(1), reverse = True)
 
 fName = imageName.split('.')[0]+'.html'
@@ -95,4 +107,4 @@ text-shadow:-1px -1px 0 #000, \
     f.write("</div>\n")
     f.write("</body>\n")
     f.write("</html>\n")
-        
+
