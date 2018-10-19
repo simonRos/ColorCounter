@@ -2,7 +2,14 @@
 
 import operator
 import os
-from PIL import Image
+try:
+    from PIL import Image
+except:
+    pass
+try:
+    import Image
+except:
+    pass
 
 imageName = input("Image name: ")
 limit = int(input("How many colors would you like?: "))
