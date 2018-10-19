@@ -5,26 +5,26 @@ import os
 try:
     from PIL import Image
 except Exception as e1:
-    print(e1)
-try:
-    import Image
-except Exception as e2:
-    print(e2)
+    try:
+        import Image
+    except Exception as e2:
+        print(e1)
+        print(e2)
 
 imageName = input("Image name: ")
 limit = 10
 try:
-    int(input("How many colors would you like?: "))
+    int(input("How many colors would you like?(10): "))
 except:
     pass
 ignoreDarkLimit = 50
 try:
-    ignoreDarkLimit = int(input("Ignore colors darker than(0-75): "))
+    ignoreDarkLimit = int(input("Ignore colors darker than(50): "))
 except:
     pass
-ignoreLightLimit = 230
+ignoreLightLimit = 200
 try:
-    ignoreLightLimit = int(input("Ignore colors lighter than(245-255): "))
+    ignoreLightLimit = int(input("Ignore colors lighter than(200): "))
 except:
     pass
 
@@ -72,7 +72,9 @@ text-shadow:-1px -1px 0 #000, \
     c = 0
     while c < limit and c < len(sortedTop):
         #simple, average greyscaling
-        grey = (sum(sortedTop[c][0])/3)
+        grey = sortedTop[c][0][0] * 0.21
+        grey+= sortedTop[c][0][1] * 0.72
+        grey+= sortedTop[c][0][2] * 0.07
         if (grey < ignoreLightLimit
             and grey > ignoreDarkLimit):
             f.write("<li>\n")
