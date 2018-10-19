@@ -4,17 +4,29 @@ import operator
 import os
 try:
     from PIL import Image
-except:
-    pass
+except Exception as e1:
+    print(e1)
 try:
     import Image
-except:
-    pass
+except Exception as e2:
+    print(e2)
 
 imageName = input("Image name: ")
-limit = int(input("How many colors would you like?: "))
-ignoreDarkLimit = int(input("Ignore colors darker than(0-75): ")) #0-75
-ignoreLightLimit = int(input("Ignore colors lighter than(750-765): "))#765
+limit = 10
+try:
+    int(input("How many colors would you like?: "))
+except:
+    pass
+ignoreDarkLimit = 75
+try:
+    ignoreDarkLimit = int(input("Ignore colors darker than(0-75): ")) #0-75
+except:
+    pass
+ignoreLightLimit = 245
+try:
+    int(input("Ignore colors lighter than(245-255): "))#765
+except:
+    pass
 
 img = None
 try:
