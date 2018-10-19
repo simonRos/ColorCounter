@@ -17,14 +17,14 @@ try:
     int(input("How many colors would you like?: "))
 except:
     pass
-ignoreDarkLimit = 75
+ignoreDarkLimit = 50
 try:
-    ignoreDarkLimit = int(input("Ignore colors darker than(0-75): ")) #0-75
+    ignoreDarkLimit = int(input("Ignore colors darker than(0-75): "))
 except:
     pass
-ignoreLightLimit = 245
+ignoreLightLimit = 230
 try:
-    int(input("Ignore colors lighter than(245-255): "))#765
+    ignoreLightLimit = int(input("Ignore colors lighter than(245-255): "))
 except:
     pass
 
